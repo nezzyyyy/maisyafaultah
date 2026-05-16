@@ -33,7 +33,7 @@
             z-index: 1;
         }
 
-        .heart, .sparkle, .cake {
+        .heart, .sparkle {
             position: absolute;
             font-size: 20px;
             animation: float 6s infinite linear;
@@ -226,11 +226,33 @@
             box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
         }
 
+        /* Letter Section */
+        .letter-section {
+            display: none;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            backdrop-filter: blur(15px);
+            animation: fadeInUp 1s ease-out;
+            border: 2px dashed #ff9a9e;
+        }
+
+        .letter-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #444;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+
         /* Final Screen */
         .final-screen {
             display: none;
             text-align: center;
             animation: fadeInUp 1s ease-out;
+            max-width: 550px;
         }
 
         .summary {
@@ -240,6 +262,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
             margin: 20px 0;
+            width: 100%;
         }
 
         .summary h3 {
@@ -302,6 +325,11 @@
                 flex-direction: column;
                 align-items: center;
             }
+            
+            .letter-text {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
         }
     </style>
 </head>
@@ -317,7 +345,7 @@
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Birthday Proposal Section -->
+        <!-- Birthday Section -->
         <div class="birthday-section" id="birthdaySection">
             <h1>🎂 Selamat Ulang Tahun, Maisyafa! 💕</h1>
             <p style="color: white; font-size: 1.3rem; margin-bottom: 30px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
@@ -352,8 +380,18 @@
             <div class="question" data-question="3">
                 <h2>🎁 Kado apa yang paling kamu pengen?</h2>
                 <input type="text" id="giftInput" placeholder="Sebutin aja, nanti aku kabulin! 💭">
-                <button class="next-btn" onclick="showFinalScreen()">Selesai! 💖</button>
+                <button class="next-btn" onclick="showLetterScreen()">Selesai! 💖</button>
             </div>
+        </div>
+
+        <!-- Letter Section (Ucapan Panjang) -->
+        <div class="letter-section" id="letterSection">
+            <h2 style="color: #c44569; margin-bottom: 20px; font-size: 1.8rem; text-align: center;">Dear Maisyafa Naysa Hasibuan... 💌</h2>
+            <div class="letter-text">
+                Selamat ulang tahun untuk Maisyafa Naysa Hasibuan, sosok indah yang kehadirannya selalu berhasil memberi warna baru dalam hidupku. Tepat di tanggal 17 Mei ini, saat dunia merayakan hari lahirmu, aku memanjatkan doa terbaik kepada Allah SWT agar kamu senantiasa diberikan umur yang panjang nan berkah, kesehatan yang afiat, serta kemudahan dalam segala urusan dunia dan akhirat. <br><br>
+                Barakallah fii umrik, Sayang. Semoga Allah selalu menjaga hatimu dalam kedamaian, menetapkan langkahmu di atas kebaikan, dan mengabulkan setiap hajat serta impian yang kamu semogakan. Terima kasih telah lahir ke dunia dan menjadi salah satu alasan terbesarku untuk bersyukur; semoga di usia yang baru ini, kamu tumbuh menjadi pribadi yang semakin salihah, dan semoga aku bisa terus berada di sisimu untuk merayakan setiap babak baru yang penuh berkah dalam hidupmu.
+            </div>
+            <button class="yes-btn" onclick="showFinalScreen()" style="padding: 15px 35px; font-size: 1.2rem;">Lihat Rencana Ulang Tahun Kita ✨</button>
         </div>
 
         <!-- Final Screen -->
@@ -362,8 +400,8 @@
                 <!-- Summary will be populated here -->
             </div>
             <div class="love-message">
-                Terima kasih sudah lahir ke dunia dan jadi bagian terindah di hidupku, Maisyafa! 
-                <br>💕 Semoga semua impianmu terwujud bersamaku! 💕
+                Aku beruntung banget punya kamu, Maisyafa! 
+                <br>💕 Kita bakal bahagia bareng! 💕
             </div>
             <button class="screenshot-btn" onclick="captureScreenshot()">💾 Save This Birthday Memory</button>
         </div>
@@ -474,10 +512,16 @@
             }
         });
 
-        // Show final screen
-        function showFinalScreen() {
+        // Show Letter Screen (Ucapan sebelum bagian paling akhir)
+        function showLetterScreen() {
             answers.gift = document.getElementById('giftInput').value;
-            
+            document.getElementById('questionsSection').classList.add('hidden');
+            document.getElementById('letterSection').style.display = 'block';
+            celebrate();
+        }
+
+        // Show final screen (Bagian Paling Akhir)
+        function showFinalScreen() {
             const summary = document.getElementById('summary');
             summary.innerHTML = `
                 <h3>🎂 Birthday Plan Kita 💕</h3>
@@ -486,9 +530,9 @@
                 <p><strong>🎁 Kado Impian:</strong> ${answers.gift || 'Kejutan spesial dari aku! 🌍'}</p>
             `;
             
-            document.getElementById('questionsSection').classList.add('hidden');
+            document.getElementById('letterSection').style.display = 'none';
             document.getElementById('finalScreen').style.display = 'block';
-            celebrate(); // Rayakan lagi di halaman terakhir
+            celebrate();
         }
 
         // Celebration effect (Confetti)
@@ -530,7 +574,6 @@
 
         // Fixed Screenshot function
         function captureScreenshot() {
-            // Sembunyikan kursor kustom agar tidak ikut terfoto
             cursor.style.display = 'none';
             
             html2canvas(document.body).then(canvas => {
@@ -539,7 +582,6 @@
                 link.href = canvas.toDataURL();
                 link.click();
                 
-                // Tampilkan kembali kursor setelah screenshot selesai
                 cursor.style.display = 'block';
             });
         }
